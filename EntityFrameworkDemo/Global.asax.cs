@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
+using EntityFrameworkDemo.DI;
 
 namespace EntityFrameworkDemo
 {
@@ -11,7 +8,7 @@ namespace EntityFrameworkDemo
     {
         protected void Application_Start()
         {
-            AreaRegistration.RegisterAllAreas();
+            DependencyResolver.SetResolver(new DependencyInjectionResolver());
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
     }

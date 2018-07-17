@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[CompCV](
+﻿CREATE TABLE [dbo].[CompCv](
 	[CvId] [uniqueidentifier] NOT NULL,
 	[FirstName] [nvarchar](50) NOT NULL,
 	[LastName] [nvarchar](50) NOT NULL,
