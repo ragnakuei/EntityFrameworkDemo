@@ -1,7 +1,26 @@
-﻿
+﻿@using System.Net.Http
+@model EntityFrameworkDemo.Models.ViewModel.CultureVM
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
 
+<ul>
+    <li>@Html.ActionLink("Country", "Index", "Country")</li>
+</ul>
+
+@using (Html.BeginForm("set","Home",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <br />
+    <div>
+        <b>Current Language：@ViewBag.CookieCulture</b>
+    </div>
+    <hr />
+    @Html.DisplayNameFor(model => model.Language)
+    <text>：</text>
+    @Html.DropDownListFor(model => model.Language, (IEnumerable<SelectListItem>)ViewData["LangSelectList"])
+    <input type="submit" value="submit">
+}

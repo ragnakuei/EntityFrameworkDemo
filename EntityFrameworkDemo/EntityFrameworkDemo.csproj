@@ -57,8 +57,11 @@
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.1.1\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.6\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.7\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
@@ -126,15 +129,29 @@
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
+    <Content Include="Views\County\Create.cshtml" />
+    <Content Include="Views\County\Delete.cshtml" />
+    <Content Include="Views\County\Details.cshtml" />
+    <Content Include="Views\County\Edit.cshtml" />
+    <Content Include="Views\County\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BLL\CountryBLL.cs" />
+    <Compile Include="BLL\ICountryBLL.cs" />
+    <Compile Include="Controllers\CountryController.cs" />
+    <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="DAL\ICountryDAL.cs" />
     <Compile Include="DI\DependencyInjectionResolver.cs" />
     <Compile Include="EF\DemoDbContext.cs" />
+    <Compile Include="Enums\CultureEnum.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CultureEnumHelpers.cs" />
+    <Compile Include="Helpers\CultureHelper.cs" />
+    <Compile Include="Log\LogAdapter.cs" />
     <Compile Include="Models\EntityModel\ActionReceipt.cs" />
     <Compile Include="Models\EntityModel\ActionReceiptNoteLanguage.cs" />
     <Compile Include="Models\EntityModel\CompCvLanguageRequirement.cs" />
@@ -145,6 +162,8 @@
     <Compile Include="Models\EntityModel\CountryLanguage.cs" />
     <Compile Include="Models\EntityModel\County.cs" />
     <Compile Include="Models\EntityModel\CountyLanguage.cs" />
+    <Compile Include="Models\ViewModel\CountryVM.cs" />
+    <Compile Include="Models\ViewModel\CultureVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +176,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Country\Create.cshtml" />
+    <Content Include="Views\Country\Details.cshtml" />
+    <Content Include="Views\Country\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -166,10 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="BLL\" />
-    <Folder Include="DAL\" />
     <Folder Include="Models\DTO\" />
-    <Folder Include="Models\ViewModel\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -6,14 +6,14 @@ namespace EntityFrameworkDemo.EF
 {
     public class DemoDbContext : DbContext
     {
-        private readonly Logger _logger;
+        private readonly ILogger _logger;
 
         private DemoDbContext() : base("name=DemoDbContext")
         {
-            _logger = LogManager.GetCurrentClassLogger();
+            _logger      = LogManager.GetCurrentClassLogger();
             Database.Log = log => _logger.Debug(log);
         }
-        
+
         public static DemoDbContext Create()
         {
             var dbContext = new DemoDbContext();
@@ -25,15 +25,15 @@ namespace EntityFrameworkDemo.EF
             return dbContext;
         }
 
-        public DbSet<CompCv> CompCvs { get; set; }
-        public DbSet<CompCvCertificate> CompCvCertificates { get; set; }
-        public DbSet<CompCvEducation> CompCvEducations { get; set; }
+        public DbSet<CompCv>                    CompCvs                    { get; set; }
+        public DbSet<CompCvCertificate>         CompCvCertificates         { get; set; }
+        public DbSet<CompCvEducation>           CompCvEducations           { get; set; }
         public DbSet<CompCvLanguageRequirement> CompCvLanguageRequirements { get; set; }
-        public DbSet<Country> Countries { get; set; }
-        public DbSet<CountryLanguage> ConCountryLanguages { get; set; }
-        public DbSet<County> Counties { get; set; }
-        public DbSet<CountyLanguage> CountyLanguages { get; set; }
-        public DbSet<ActionReceipt> ActionReceipts { get; set; }
-        public DbSet<ActionReceiptNoteLanguage> ActionReceiptNoteLanguages { get; set; }
+        public DbSet<Country>                   Country                  { get; set; }
+        public DbSet<CountryLanguage>           ConCountryLanguages        { get; set; }
+        public DbSet<County>                    Counties                   { get; set; }
+        public DbSet<CountyLanguage>            CountyLanguages            { get; set; }
+        //public DbSet<ActionReceipt>             ActionReceipts             { get; set; }
+        //public DbSet<ActionReceiptNoteLanguage> ActionReceiptNoteLanguages { get; set; }
     }
 }

@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using EntityFrameworkDemo.BLL;
 using EntityFrameworkDemo.Controllers;
+using EntityFrameworkDemo.DAL;
+using EntityFrameworkDemo.EF;
+using EntityFrameworkDemo.Log;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
 
 namespace EntityFrameworkDemo.DI
 {
@@ -14,9 +19,18 @@ namespace EntityFrameworkDemo.DI
         static DependencyInjectionResolver()
         {
             var service = new ServiceCollection();
+
+            service.AddScoped<LogAdapter, LogAdapter>();
+            
             service.AddTransient<HomeController>();
-            //service.AddScoped<ITest>(t => new Test());
-            //service.AddScoped<ITest, Test>();
+            service.AddTransient<CountryController>();
+
+            service.AddScoped<ICountryBLL,CountryBLL>();
+
+            service.AddScoped<ICountryDAL, CountryDAL>();
+            
+            service.AddScoped<DemoDbContext>( s => DemoDbContext.Create());
+            
             _provider = service.BuildServiceProvider();
         }
 
