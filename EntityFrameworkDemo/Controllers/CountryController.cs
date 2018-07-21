@@ -11,14 +11,13 @@ namespace EntityFrameworkDemo.Controllers
     public class CountryController : Controller
     {
         private readonly ICountryBLL _bll;
-        private readonly LogAdapter _logAdapter;
-        private readonly UserInfo _userInfo;
+        private readonly LogAdapter  _logAdapter;
+        private readonly UserInfo    _userInfo;
 
         public CountryController(ICountryBLL bll, LogAdapter logAdapter, UserInfo userInfo)
         {
-            _userInfo = userInfo;
-            _bll = bll;
-            _bll.UserInfo = _userInfo;
+            _userInfo   = userInfo;
+            _bll        = bll;
             _logAdapter = logAdapter;
             _logAdapter.Initial(nameof(CountryController));
         }

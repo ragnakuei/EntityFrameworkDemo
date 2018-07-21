@@ -7,8 +7,6 @@ namespace EntityFrameworkDemo.BLL.IBLL
 {
     public interface ICountryBLL
     {
-        UserInfo        UserInfo { set; }
-
         List<CountryVM> Get();
         CountryVM       Get(Guid         id);
         bool            Add(CountryVM    countryVm);

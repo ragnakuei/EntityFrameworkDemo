@@ -12,30 +12,21 @@ namespace EntityFrameworkDemo.BLL
 {
     public class CountyBLL : ICountyBLL
     {
-        private readonly ICountyDAL _countyDal;
+        private readonly ICountyDAL  _countyDal;
         private readonly ICountryDAL _countryDal;
-        private readonly LogAdapter _logger;
-        private UserInfo _userInfo;
+        private readonly LogAdapter  _logger;
+        private readonly UserInfo    _userInfo;
 
-        public CountyBLL(ICountyDAL countyDal,
+        public CountyBLL(ICountyDAL  countyDal,
                          ICountryDAL countryDal,
-                         LogAdapter logger)
+                         LogAdapter  logger,
+                         UserInfo    userInfo)
         {
-            _countyDal    = countyDal;
+            _countyDal  = countyDal;
             _countryDal = countryDal;
-            _logger = logger;
+            _logger     = logger;
+            _userInfo   = userInfo;
             _logger.Initial(nameof(CountyBLL));
-        }
-
-        public UserInfo UserInfo
-        {
-            protected get => _userInfo;
-            set
-            {
-                _userInfo = value;
-                _countryDal.UserInfo = _userInfo;
-                _countyDal.UserInfo = _userInfo;
-            }
         }
 
         public List<CountyVM> Get()

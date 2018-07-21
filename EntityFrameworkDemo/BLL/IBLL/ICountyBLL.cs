@@ -8,8 +8,6 @@ namespace EntityFrameworkDemo.BLL.IBLL
 {
     public interface ICountyBLL
     {
-        UserInfo UserInfo { set; }
-
         List<CountyVM>               Get();
         CountyVM                     Get(Guid        id);
         bool                         Add(CountyVM    countyVm);

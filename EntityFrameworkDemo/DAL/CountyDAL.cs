@@ -15,19 +15,16 @@ namespace EntityFrameworkDemo.DAL
     {
         private readonly DemoDbContext _dbContext;
         private readonly LogAdapter    _logger;
-        private UserInfo _userInfo;
+        private          UserInfo      _userInfo;
 
-        public CountyDAL(DemoDbContext dbContext, LogAdapter logger)
+        public CountyDAL(DemoDbContext dbContext,
+                         LogAdapter    logger,
+                         UserInfo      userInfo)
         {
             _dbContext = dbContext;
             _logger    = logger;
+            _userInfo = userInfo;
             _logger.Initial<CountyDAL>();
-        }
-
-        public UserInfo UserInfo
-        {
-            protected get => _userInfo;
-            set => _userInfo = value;
         }
 
         public IEnumerable<County> Get()

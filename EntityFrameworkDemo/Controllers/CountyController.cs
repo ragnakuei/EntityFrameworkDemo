@@ -14,13 +14,12 @@ namespace EntityFrameworkDemo.Controllers
     {
         private readonly ICountyBLL _bll;
         private readonly LogAdapter _logAdapter;
-        private readonly UserInfo _userInfo;
+        private readonly UserInfo   _userInfo;
 
         public CountyController(ICountyBLL bll, LogAdapter logAdapter, UserInfo userInfo)
         {
-            _userInfo = userInfo;
-            _bll = bll;
-            _bll.UserInfo = _userInfo;
+            _userInfo   = userInfo;
+            _bll        = bll;
             _logAdapter = logAdapter;
             _logAdapter.Initial(nameof(CountyController));
         }

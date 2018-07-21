@@ -14,22 +14,16 @@ namespace EntityFrameworkDemo.BLL
     {
         private readonly ICountryDAL _countryDal;
         private readonly LogAdapter  _logger;
-        private UserInfo _userInfo;
+        private readonly UserInfo    _userInfo;
 
-        public CountryBLL(ICountryDAL countryDal, LogAdapter logger)
+        public CountryBLL(ICountryDAL countryDal,
+                          LogAdapter  logger,
+                          UserInfo    userInfo)
         {
-            _countryDal    = countryDal;
-            _logger = logger;
+            _countryDal = countryDal;
+            _logger     = logger;
+            _userInfo   = userInfo;
             _logger.Initial(nameof(CountryBLL));
-        }
-
-        public UserInfo UserInfo
-        {
-            protected get => _userInfo;
-            set {
-                _userInfo            = value;
-                _countryDal.UserInfo = _userInfo;
-            }
         }
 
         public List<CountryVM> Get()
