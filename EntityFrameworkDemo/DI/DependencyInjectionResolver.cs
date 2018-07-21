@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using EntityFrameworkDemo.BLL;
+using EntityFrameworkDemo.BLL.IBLL;
 using EntityFrameworkDemo.Controllers;
 using EntityFrameworkDemo.DAL;
+using EntityFrameworkDemo.DAL.IDAL;
 using EntityFrameworkDemo.EF;
 using EntityFrameworkDemo.Log;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,10 +26,13 @@ namespace EntityFrameworkDemo.DI
             
             service.AddTransient<HomeController>();
             service.AddTransient<CountryController>();
+            service.AddTransient<CountyController>();
 
-            service.AddScoped<ICountryBLL,CountryBLL>();
+            service.AddTransient<ICountryBLL,CountryBLL>();
+            service.AddTransient<ICountyBLL,CountyBLL>();
 
-            service.AddScoped<ICountryDAL, CountryDAL>();
+            service.AddTransient<ICountryDAL, CountryDAL>();
+            service.AddTransient<ICountyDAL, CountyDAL>();
             
             service.AddScoped<DemoDbContext>( s => DemoDbContext.Create());
             

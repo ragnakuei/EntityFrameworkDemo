@@ -1,136 +1,134 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
+using System.Threading;
 using System.Web.Mvc;
-using EntityFrameworkDemo.EF;
-using EntityFrameworkDemo.Models.EntityModel;
+using EntityFrameworkDemo.BLL;
+using EntityFrameworkDemo.BLL.IBLL;
+using EntityFrameworkDemo.Enums;
+using EntityFrameworkDemo.Log;
+using EntityFrameworkDemo.Models.Shared;
+using EntityFrameworkDemo.Models.ViewModel;
 
 namespace EntityFrameworkDemo.Controllers
 {
     public class CountyController : Controller
     {
-        private readonly DemoDbContext db = DemoDbContext.Create();
+        private readonly ICountyBLL _bll;
+        private readonly LogAdapter _logAdapter;
 
-        // GET: County
-        public ActionResult Index()
+        public CountyController(ICountyBLL bll, LogAdapter logAdapter)
         {
-            var counties = db?.Counties
-                             ?.Include(c => c.Country)
-                             .ToArray();
-            return View(counties);
+            _bll = bll;
+            _logAdapter = logAdapter;
+            _logAdapter.Initial(nameof(CountyController));
         }
 
-        // GET: County/Details/5
-        public ActionResult Details(Guid? id)
+        public ActionResult Index()
         {
-            if (id == null)
-            {
+            var data = _bll.Get();
+            return View(data);
+        }
+
+        public ActionResult Details(Guid id)
+        {
+            if (id == Guid.Empty)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            County county = db.Counties.Find(id);
+
+            var county = _bll.Get(id);
             if (county == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(county);
         }
 
-        // GET: County/Create
         public ActionResult Create()
         {
-            ViewBag.CountryId = new SelectList(db.Country, "CountryId", "Code");
+            ViewBag.CountryId = GetCountryList();
             return View();
         }
 
-        // POST: County/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CountyId,CountryId")] County county)
+        public ActionResult Create(CountyVM countyVm)
         {
             if (ModelState.IsValid)
             {
-                county.CountyId = Guid.NewGuid();
-                db.Counties.Add(county);
-                db.SaveChanges();
+                _bll.Add(countyVm);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CountryId = new SelectList(db.Country, "CountryId", "Code", county.CountryId);
+            ViewBag.CountryId = GetCountryList();
+            return View(countyVm);
+        }
+
+        public ActionResult Edit(Guid id)
+        {
+            if (id == Guid.Empty)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var county = _bll.Get(id);
+            if (county == null)
+                return HttpNotFound();
+
+            ViewBag.CountryId = GetCountryList();
             return View(county);
         }
 
-        // GET: County/Edit/5
-        public ActionResult Edit(Guid? id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(CountyVM county)
         {
-            if (id == null)
+            if (ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                try
+                {
+                    _bll.Update(county);
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError(string.Empty, e.Message);
+                    ViewBag.CountryId = GetCountryList();
+                    return View(county);
+                }
+                return RedirectToAction("Index");
             }
-            County county = db.Counties.Find(id);
+
+            ViewBag.CountryId = GetCountryList();
+            return View(county);
+        }
+
+        public ActionResult Delete(Guid id)
+        {
+            if (id == Guid.Empty)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var county = _bll.Get(id);
             if (county == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CountryId = new SelectList(db.Country, "CountryId", "Code", county.CountryId);
             return View(county);
         }
 
-        // POST: County/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CountyId,CountryId")] County county)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(county).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CountryId = new SelectList(db.Country, "CountryId", "Code", county.CountryId);
-            return View(county);
-        }
-
-        // GET: County/Delete/5
-        public ActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            County county = db.Counties.Find(id);
-            if (county == null)
-            {
-                return HttpNotFound();
-            }
-            return View(county);
-        }
-
-        // POST: County/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            County county = db.Counties.Find(id);
-            db.Counties.Remove(county);
-            db.SaveChanges();
+            _bll.Del(id);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+        private IEnumerable<SelectListItem> GetCountryList()
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            var result = _bll.GetIdAndCurrentLanguageNames()
+                             .Select(cl=>new SelectListItem
+                                         {
+                                             Value = cl.CountryId.ToString(),
+                                             Text  = cl.Name
+                                         });
+            return result;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Net;
 using System.Web.Mvc;
 using EntityFrameworkDemo.BLL;
+using EntityFrameworkDemo.BLL.IBLL;
 using EntityFrameworkDemo.Log;
 using EntityFrameworkDemo.Models.EntityModel;
 using EntityFrameworkDemo.Models.ViewModel;

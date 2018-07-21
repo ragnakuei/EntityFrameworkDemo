@@ -129,21 +129,20 @@
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
-    <Content Include="Views\County\Create.cshtml" />
-    <Content Include="Views\County\Delete.cshtml" />
-    <Content Include="Views\County\Details.cshtml" />
-    <Content Include="Views\County\Edit.cshtml" />
-    <Content Include="Views\County\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="BLL\CountryBLL.cs" />
-    <Compile Include="BLL\ICountryBLL.cs" />
+    <Compile Include="BLL\CountyBLL.cs" />
+    <Compile Include="BLL\IBLL\ICountryBLL.cs" />
+    <Compile Include="BLL\IBLL\ICountyBLL.cs" />
+    <Compile Include="DAL\CountyDAL.cs" />
+    <Compile Include="DAL\IDAL\ICountyDAL.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\CountryDAL.cs" />
-    <Compile Include="DAL\ICountryDAL.cs" />
+    <Compile Include="DAL\IDAL\ICountryDAL.cs" />
     <Compile Include="DI\DependencyInjectionResolver.cs" />
     <Compile Include="EF\DemoDbContext.cs" />
     <Compile Include="Enums\CultureEnum.cs" />
@@ -163,7 +162,9 @@
     <Compile Include="Models\EntityModel\CountryLanguage.cs" />
     <Compile Include="Models\EntityModel\County.cs" />
     <Compile Include="Models\EntityModel\CountyLanguage.cs" />
+    <Compile Include="Models\Shared\UserInfo.cs" />
     <Compile Include="Models\ViewModel\CountryVM.cs" />
+    <Compile Include="Models\ViewModel\CountyVM.cs" />
     <Compile Include="Models\ViewModel\CultureVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -182,6 +183,11 @@
     <Content Include="Views\Country\Edit.cshtml" />
     <Content Include="Views\Country\Details.cshtml" />
     <Content Include="Views\Country\Delete.cshtml" />
+    <Content Include="Views\County\Index.cshtml" />
+    <Content Include="Views\County\Create.cshtml" />
+    <Content Include="Views\County\Details.cshtml" />
+    <Content Include="Views\County\Edit.cshtml" />
+    <Content Include="Views\County\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

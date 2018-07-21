@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using EntityFrameworkDemo.BLL.IBLL;
 using EntityFrameworkDemo.DAL;
+using EntityFrameworkDemo.DAL.IDAL;
 using EntityFrameworkDemo.Log;
 using EntityFrameworkDemo.Models.EntityModel;
 using EntityFrameworkDemo.Models.ViewModel;
@@ -13,20 +15,22 @@ namespace EntityFrameworkDemo.BLL
     {
         private readonly ICountryDAL _dal;
         private readonly LogAdapter  _logger;
+        private string _currentLanguage;
 
         public CountryBLL(ICountryDAL dal, LogAdapter logger)
         {
             _dal    = dal;
             _logger = logger;
             _logger.Initial(nameof(CountryBLL));
+            _currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
         }
 
         public List<CountryVM> Get()
         {
-            var entities = _dal.Get()
-                               .Select(c => ToCountryVM(c))
-                               .ToList();
-            return entities;
+            var vms = _dal.Get()
+                          .Select(c => ToCountryVM(c))
+                          .ToList();
+            return vms;
         }
 
         private CountryVM ToCountryVM(Country entity)
@@ -35,18 +39,11 @@ namespace EntityFrameworkDemo.BLL
             result.Id   = entity.CountryId;
             result.Code = entity.Code;
 
-            var currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
-
             var countryLanguage = entity.CountryLanguages
-                                        .FirstOrDefault(l => l.Language == currentLanguage);
-            if (countryLanguage == null)
+                                        .FirstOrDefault(cl=> cl.Language == _currentLanguage);
+            result.Language = _currentLanguage;
+            if (countryLanguage != null)
             {
-                result.Language = Thread.CurrentThread.CurrentCulture.ToString();
-                result.LanguageId = Guid.NewGuid();
-            }
-            else
-            {
-                result.Language   = currentLanguage;
                 result.LanguageId = countryLanguage.CountryLanguageId;
                 result.Name       = countryLanguage.Name;
             }
@@ -68,7 +65,7 @@ namespace EntityFrameworkDemo.BLL
             return _dal.Add(entity);
         }
 
-        private static Country ToCountryInsertEntity(CountryVM countryVm)
+        private Country ToCountryInsertEntity(CountryVM countryVm)
         {
             Country entity;
             entity = new Country
@@ -81,7 +78,7 @@ namespace EntityFrameworkDemo.BLL
                                           new CountryLanguage
                                           {
                                               CountryLanguageId = Guid.NewGuid(),
-                                              Language          = Thread.CurrentThread.CurrentCulture.ToString(),
+                                              Language          = _currentLanguage,
                                               Name              = countryVm.Name,
                                               //CountryId         = entity.CountryId   // 可以不用預先給定
                                           }
@@ -101,10 +98,8 @@ namespace EntityFrameworkDemo.BLL
             var item = new CountryLanguage();
             item.CountryId = countryVm.Id;
             item.Name = countryVm.Name;
-            item.Language = countryVm.Language ?? Thread.CurrentThread.CurrentCulture.ToString();
-            item.CountryLanguageId = countryVm.LanguageId.HasValue 
-                                         ? countryVm.LanguageId.Value 
-                                         : Guid.NewGuid();
+            item.Language = countryVm.Language ?? _currentLanguage;
+            item.CountryLanguageId = countryVm.LanguageId ?? Guid.NewGuid();
             result.CountryLanguages.Add(item);
             return _dal.Update(result);
         }
