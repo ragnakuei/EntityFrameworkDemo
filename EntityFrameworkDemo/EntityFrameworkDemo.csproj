@@ -181,6 +181,7 @@
     <Content Include="Views\Country\Index.cshtml" />
     <Content Include="Views\Country\Edit.cshtml" />
     <Content Include="Views\Country\Details.cshtml" />
+    <Content Include="Views\Country\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -10,15 +10,15 @@ using EntityFrameworkDemo.Models.ViewModel;
 
 namespace EntityFrameworkDemo.DAL
 {
-    public class CountryDAL : ICountryDAL
+    public class CountryDAL : ICountryDAL, IDisposable
     {
         private readonly DemoDbContext _dbContext;
-        private readonly LogAdapter    _logger;
+        private readonly LogAdapter _logger;
 
         public CountryDAL(DemoDbContext dbContext, LogAdapter logger)
         {
             _dbContext = dbContext;
-            _logger    = logger;
+            _logger = logger;
             _logger.Initial<CountryDAL>();
         }
 
@@ -26,8 +26,8 @@ namespace EntityFrameworkDemo.DAL
         {
             // 使用 Left Join
             return _dbContext.Country
-                             .AsNoTracking()
-                             .Include("CountryLanguages");
+                             .Include(c => c.CountryLanguages)
+                             .AsNoTracking();
         }
 
         public Country Get(Guid id)
@@ -39,11 +39,26 @@ namespace EntityFrameworkDemo.DAL
 
             var currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
             var countryLanguage = _dbContext.CountryLanguage
-                                            .Where(l => l.CountryId   == id
+                                            .Where(l => l.CountryId == id
                                                         && l.Language == currentLanguage)
                                             .AsNoTracking();
             country.CountryLanguages = countryLanguage.ToList();
             return country;
+        }
+
+        public bool Add(Country country)
+        {
+            try
+            {
+                _dbContext.Country.Add(country);
+                return _dbContext.SaveChanges() > 0;
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.StackTrace);
+                _logger.Error(e.Message);
+                return false;
+            }
         }
 
         /// <summary>
@@ -62,31 +77,42 @@ namespace EntityFrameworkDemo.DAL
 
             var countryLanguageInDb = _dbContext.CountryLanguage
                                                 .FirstOrDefault(l => l.CountryLanguageId == updateEntity.LanguageId
-                                                                     && l.Language       == updateEntity.Language);
+                                                                     && l.Language == updateEntity.Language);
+            CountryLanguage attachedCountryLanguage;
             if (countryLanguageInDb == null)
-                throw new Exception("CountryLanguage 無對應資料可更新");
-            var attachedCountryLanguage = _dbContext.CountryLanguage.Attach(countryLanguageInDb);
-            attachedCountryLanguage.Name = updateEntity.Name;
-
-            _dbContext.Entry(attachedCountryLanguage).Property(p => p.Name).IsModified = true;
+            {
+                attachedCountryLanguage = new CountryLanguage();
+                attachedCountryLanguage.CountryLanguageId = Guid.NewGuid();
+                attachedCountryLanguage.Language = Thread.CurrentThread.CurrentCulture.ToString();
+                attachedCountryLanguage.Name = updateEntity.Name;
+                attachedCountryLanguage.CountryId = countryInDB.CountryId;
+                _dbContext.CountryLanguage.Add(attachedCountryLanguage);
+            }
+            else
+            {
+                attachedCountryLanguage = _dbContext.CountryLanguage.Attach(countryLanguageInDb);
+                attachedCountryLanguage.Name = updateEntity.Name;
+                _dbContext.Entry(attachedCountryLanguage).Property(p => p.Name).IsModified = true;
+            }
 
             // 同時更新二個 Table，會自動加上 transaction
             return _dbContext.SaveChanges() > 0;
         }
 
-        public bool Add(Country country)
+        public bool Delete(Guid id)
+        {  
+            var delCountry = _dbContext.Country.FirstOrDefault(c => c.CountryId == id);
+            var delCountryLanguages = _dbContext.CountryLanguage.Where(c => c.CountryId == delCountry.CountryId);
+
+            _dbContext.CountryLanguage.RemoveRange(delCountryLanguages);
+            _dbContext.Country.Remove(delCountry);
+
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        public void Dispose()
         {
-            try
-            {
-                _dbContext.Country.Add(country);
-                return _dbContext.SaveChanges() > 0;
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e.StackTrace);
-                _logger.Error(e.Message);
-                return false;
-            }
+            _dbContext?.Dispose();
         }
     }
 }

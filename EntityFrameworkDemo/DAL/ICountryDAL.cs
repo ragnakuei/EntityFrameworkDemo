@@ -13,5 +13,6 @@ namespace EntityFrameworkDemo.DAL
         bool Add(Country country);
         Country Get(Guid id);
         bool Update(CountryVM entity);
+        bool Delete(Guid id);
     }
 }

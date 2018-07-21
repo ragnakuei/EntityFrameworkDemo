@@ -9,7 +9,7 @@ using EntityFrameworkDemo.Models.ViewModel;
 
 namespace EntityFrameworkDemo.BLL
 {
-    public class CountryBLL : ICountryBLL, IDisposable
+    public class CountryBLL : ICountryBLL
     {
         private readonly ICountryDAL _dal;
         private readonly LogAdapter  _logger;
@@ -40,7 +40,7 @@ namespace EntityFrameworkDemo.BLL
             var countryLanguage = entity.CountryLanguages
                                         .FirstOrDefault(l => l.Language == currentLanguage);
             if (countryLanguage == null)
-                throw new Exception("指定 Country 無對應語系資料");
+                countryLanguage = new CountryLanguage();
 
             result.Language = currentLanguage;
             result.LanguageId = countryLanguage.CountryLanguageId;
@@ -91,12 +91,7 @@ namespace EntityFrameworkDemo.BLL
 
         public bool Del(Guid id)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
+            return _dal.Delete(id);
         }
     }
 }
