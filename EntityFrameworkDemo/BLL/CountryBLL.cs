@@ -33,13 +33,19 @@ namespace EntityFrameworkDemo.BLL
         {
             var result = new CountryVM();
             result.Id = entity.CountryId;
+            result.Code = entity.Code;
 
             var currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
+
             var countryLanguage = entity.CountryLanguages
                                         .FirstOrDefault(l => l.Language == currentLanguage);
+            if (countryLanguage == null)
+                throw new Exception("指定 Country 無對應語系資料");
+
             result.Language = currentLanguage;
-            result.Name     = countryLanguage?.Name;
-            result.Code     = entity.Code;
+            result.LanguageId = countryLanguage.CountryLanguageId;
+            result.Name     = countryLanguage.Name;
+            
             return result;
         }
 
@@ -53,6 +59,13 @@ namespace EntityFrameworkDemo.BLL
         public bool Add(CountryVM countryVm)
         {
             var entity = new Country();
+            entity = ToCountryInsertEntity(countryVm);
+            return _dal.Add(entity);
+        }
+
+        private static Country ToCountryInsertEntity(CountryVM countryVm)
+        {
+            Country entity;
             entity = new Country
                      {
                          CountryId = Guid.NewGuid(),
@@ -65,15 +78,15 @@ namespace EntityFrameworkDemo.BLL
                                               CountryLanguageId = Guid.NewGuid(),
                                               Language          = countryVm.Language,
                                               Name              = countryVm.Name,
-                                              //CountryId         = entity.CountryId
+                                              //CountryId         = entity.CountryId   // 可以不用預先給定
                                           }
                                       };
-            return _dal.Add(entity);
+            return entity;
         }
 
-        public bool Update(Country country)
+        public bool Update(CountryVM country)
         {
-            throw new NotImplementedException();
+            return _dal.Update(country);
         }
 
         public bool Del(Guid id)

@@ -59,23 +59,31 @@ namespace EntityFrameworkDemo.Controllers
 
         public ActionResult Edit(Guid id)
         {
-            if (id == null)
+            if (id == Guid.Empty)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
             var country = _bll.Get(id);
             if (country == null)
                 return HttpNotFound();
-            
+
             return View(country);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Country country)
+        public ActionResult Edit(CountryVM country)
         {
             if (ModelState.IsValid)
             {
-                _bll.Update(country);
+                try
+                {
+                    _bll.Update(country);
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError(string.Empty,e.Message);
+                    return View(country);
+                }
                 return RedirectToAction("Index");
             }
             return View(country);
@@ -83,10 +91,8 @@ namespace EntityFrameworkDemo.Controllers
 
         public ActionResult Delete(Guid id)
         {
-            if (id == null)
-            {
+            if (id == Guid.Empty)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
 
             var country = _bll.Get(id);
             if (country == null)

@@ -142,6 +142,7 @@
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="DAL\CountryDAL.cs" />
     <Compile Include="DAL\ICountryDAL.cs" />
     <Compile Include="DI\DependencyInjectionResolver.cs" />
     <Compile Include="EF\DemoDbContext.cs" />
@@ -177,8 +178,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Country\Create.cshtml" />
-    <Content Include="Views\Country\Details.cshtml" />
     <Content Include="Views\Country\Index.cshtml" />
+    <Content Include="Views\Country\Edit.cshtml" />
+    <Content Include="Views\Country\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

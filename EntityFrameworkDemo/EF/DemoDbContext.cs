@@ -30,7 +30,7 @@ namespace EntityFrameworkDemo.EF
         public DbSet<CompCvEducation>           CompCvEducations           { get; set; }
         public DbSet<CompCvLanguageRequirement> CompCvLanguageRequirements { get; set; }
         public DbSet<Country>                   Country                  { get; set; }
-        public DbSet<CountryLanguage>           ConCountryLanguages        { get; set; }
+        public DbSet<CountryLanguage>           CountryLanguage        { get; set; }
         public DbSet<County>                    Counties                   { get; set; }
         public DbSet<CountyLanguage>            CountyLanguages            { get; set; }
         //public DbSet<ActionReceipt>             ActionReceipts             { get; set; }
