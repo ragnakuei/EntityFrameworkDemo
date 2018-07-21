@@ -63,7 +63,7 @@ namespace EntityFrameworkDemo.Helpers
 
         public static string GetDefaultCulture()
         {
-            return CultureEnum.enUS.GetDescription(); //預設為en-US 英文
+            return CultureEnum.en_US.GetDescription(); //預設為en-US 英文
         }
     }
 }

@@ -1,12 +1,20 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using EntityFrameworkDemo.Helpers;
+using EntityFrameworkDemo.Models.Shared;
 using EntityFrameworkDemo.Models.ViewModel;
 
 namespace EntityFrameworkDemo.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly UserInfo _userInfo;
+
+        public HomeController(UserInfo userInfo)
+        {
+            _userInfo = userInfo;
+        }
+
         public ActionResult Index()
         {
             var cultureCookie = Request.Cookies["_culture"]?.Value ?? "(None)";

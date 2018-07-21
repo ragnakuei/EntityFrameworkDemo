@@ -45,8 +45,6 @@ namespace EntityFrameworkDemo
                 Thread.CurrentThread.CurrentUICulture = ci;
                 Thread.CurrentThread.CurrentCulture   = ci;
             }
-
-            HttpContext.Current.Items["CurrentLanguage"] = ci.ToString();
         }
     }
 }

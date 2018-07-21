@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Net;
 using System.Web.Mvc;
-using EntityFrameworkDemo.BLL;
 using EntityFrameworkDemo.BLL.IBLL;
 using EntityFrameworkDemo.Log;
-using EntityFrameworkDemo.Models.EntityModel;
+using EntityFrameworkDemo.Models.Shared;
 using EntityFrameworkDemo.Models.ViewModel;
 
 namespace EntityFrameworkDemo.Controllers
@@ -14,10 +12,13 @@ namespace EntityFrameworkDemo.Controllers
     {
         private readonly ICountryBLL _bll;
         private readonly LogAdapter _logAdapter;
+        private readonly UserInfo _userInfo;
 
-        public CountryController(ICountryBLL bll,LogAdapter logAdapter)
+        public CountryController(ICountryBLL bll, LogAdapter logAdapter, UserInfo userInfo)
         {
+            _userInfo = userInfo;
             _bll = bll;
+            _bll.UserInfo = _userInfo;
             _logAdapter = logAdapter;
             _logAdapter.Initial(nameof(CountryController));
         }
