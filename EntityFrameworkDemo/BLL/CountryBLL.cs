@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using EntityFrameworkDemo.BLL.IBLL;
-using EntityFrameworkDemo.DAL;
 using EntityFrameworkDemo.DAL.IDAL;
 using EntityFrameworkDemo.Log;
 using EntityFrameworkDemo.Models.EntityModel;
@@ -15,14 +14,12 @@ namespace EntityFrameworkDemo.BLL
     {
         private readonly ICountryDAL _dal;
         private readonly LogAdapter  _logger;
-        private string _currentLanguage;
 
         public CountryBLL(ICountryDAL dal, LogAdapter logger)
         {
             _dal    = dal;
             _logger = logger;
             _logger.Initial(nameof(CountryBLL));
-            _currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
         }
 
         public List<CountryVM> Get()
@@ -40,8 +37,8 @@ namespace EntityFrameworkDemo.BLL
             result.Code = entity.Code;
 
             var countryLanguage = entity.CountryLanguages
-                                        .FirstOrDefault(cl=> cl.Language == _currentLanguage);
-            result.Language = _currentLanguage;
+                                        .FirstOrDefault(cl=> cl.Language == Thread.CurrentThread.CurrentUICulture.ToString());
+            result.Language = Thread.CurrentThread.CurrentUICulture.ToString();
             if (countryLanguage != null)
             {
                 result.LanguageId = countryLanguage.CountryLanguageId;
@@ -78,7 +75,7 @@ namespace EntityFrameworkDemo.BLL
                                           new CountryLanguage
                                           {
                                               CountryLanguageId = Guid.NewGuid(),
-                                              Language          = _currentLanguage,
+                                              Language          = Thread.CurrentThread.CurrentUICulture.ToString(),
                                               Name              = countryVm.Name,
                                               //CountryId         = entity.CountryId   // 可以不用預先給定
                                           }
@@ -98,7 +95,7 @@ namespace EntityFrameworkDemo.BLL
             var item = new CountryLanguage();
             item.CountryId = countryVm.Id;
             item.Name = countryVm.Name;
-            item.Language = countryVm.Language ?? _currentLanguage;
+            item.Language = countryVm.Language ?? Thread.CurrentThread.CurrentUICulture.ToString();
             item.CountryLanguageId = countryVm.LanguageId ?? Guid.NewGuid();
             result.CountryLanguages.Add(item);
             return _dal.Update(result);

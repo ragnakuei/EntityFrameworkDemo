@@ -28,11 +28,11 @@ namespace EntityFrameworkDemo.DI
             service.AddTransient<CountryController>();
             service.AddTransient<CountyController>();
 
-            service.AddTransient<ICountryBLL,CountryBLL>();
-            service.AddTransient<ICountyBLL,CountyBLL>();
+            service.AddScoped<ICountryBLL,CountryBLL>();
+            service.AddScoped<ICountyBLL,CountyBLL>();
 
-            service.AddTransient<ICountryDAL, CountryDAL>();
-            service.AddTransient<ICountyDAL, CountyDAL>();
+            service.AddScoped<ICountryDAL, CountryDAL>();
+            service.AddScoped<ICountyDAL, CountyDAL>();
             
             service.AddScoped<DemoDbContext>( s => DemoDbContext.Create());
             

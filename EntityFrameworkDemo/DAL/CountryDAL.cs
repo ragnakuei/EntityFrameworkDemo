@@ -15,14 +15,12 @@ namespace EntityFrameworkDemo.DAL
     {
         private readonly DemoDbContext _dbContext;
         private readonly LogAdapter    _logger;
-        private readonly string        _currentLanguage;
 
         public CountryDAL(DemoDbContext dbContext, LogAdapter logger)
         {
             _dbContext = dbContext;
             _logger    = logger;
             _logger.Initial<CountryDAL>();
-            _currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
         }
 
         public IEnumerable<Country> Get()
@@ -41,9 +39,10 @@ namespace EntityFrameworkDemo.DAL
             if (country == null)
                 throw new Exception("查無資料");
 
+            var currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
             var countryLanguage = _dbContext.CountryLanguage
                                             .Where(l => l.CountryId == id
-                                                        && l.Language == _currentLanguage)
+                                                        && l.Language == currentLanguage)
                                             .AsNoTracking();
             country.CountryLanguages = countryLanguage.ToList();
             return country;
@@ -93,8 +92,9 @@ namespace EntityFrameworkDemo.DAL
 
         public IEnumerable<CountryLanguage> GetIdAndCurrentLanguageNames()
         {
+            var currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
             var result = _dbContext.CountryLanguage
-                                   .Where(cl => cl.Language == _currentLanguage)
+                                   .Where(cl => cl.Language == currentLanguage)
                                    .Include(cl => cl.Country)
                                    .Select(cl=>new
                                                {

@@ -15,7 +15,6 @@ namespace EntityFrameworkDemo.BLL
         private readonly ICountyDAL _countyDal;
         private readonly ICountryDAL _countryDal;
         private readonly LogAdapter _logger;
-        private readonly string     _currentLanguage;
 
         public CountyBLL(ICountyDAL countyDal,
                          ICountryDAL countryDal,
@@ -25,7 +24,6 @@ namespace EntityFrameworkDemo.BLL
             _countryDal = countryDal;
             _logger = logger;
             _logger.Initial(nameof(CountyBLL));
-            _currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
         }
 
         public List<CountyVM> Get()
@@ -42,8 +40,8 @@ namespace EntityFrameworkDemo.BLL
             result.Id = entity.CountyId;
 
             var countyLanguage = entity.CountyLanguages
-                                       ?.FirstOrDefault(cl=>cl.Language == _currentLanguage);
-            result.Language = _currentLanguage;
+                                       ?.FirstOrDefault(cl=>cl.Language == Thread.CurrentThread.CurrentUICulture.ToString());
+            result.Language = Thread.CurrentThread.CurrentUICulture.ToString();
             if (countyLanguage != null)
             { 
                 result.LanguageId = countyLanguage.CountyLanguageId;
@@ -54,7 +52,7 @@ namespace EntityFrameworkDemo.BLL
             {
                 result.CountryId = entity.CountryId;
                 result.CountryName = entity.Country.CountryLanguages
-                                           ?.FirstOrDefault(cl => cl.Language == _currentLanguage)
+                                           ?.FirstOrDefault(cl => cl.Language == Thread.CurrentThread.CurrentUICulture.ToString())
                                            ?.Name;
             }
             
@@ -86,7 +84,7 @@ namespace EntityFrameworkDemo.BLL
                                           new CountyLanguage
                                           {
                                               CountyLanguageId = Guid.NewGuid(),
-                                              Language         = _currentLanguage,
+                                              Language         = Thread.CurrentThread.CurrentUICulture.ToString(),
                                               Name             = countyVm.Name,
                                           }
                                       };
@@ -107,7 +105,7 @@ namespace EntityFrameworkDemo.BLL
             var item = new CountyLanguage();
             item.CountyId = countyVm.Id;
             item.Name = countyVm.Name;
-            item.Language = countyVm.Language ?? _currentLanguage;
+            item.Language = countyVm.Language ?? Thread.CurrentThread.CurrentUICulture.ToString();
             item.CountyLanguageId = countyVm.LanguageId ?? Guid.NewGuid();
             result.CountyLanguages.Add(item);
 
