@@ -10,7 +10,7 @@ namespace EntityFrameworkDemo.BLL
         List<CountryVM> Get();
         CountryVM Get(Guid id);
         bool Add(CountryVM countryVm);
-        bool Update(CountryVM country);
+        bool Update(CountryVM countryVm);
         bool Del(Guid id);
     }
 }

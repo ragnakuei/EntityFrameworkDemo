@@ -32,7 +32,7 @@ namespace EntityFrameworkDemo.BLL
         private CountryVM ToCountryVM(Country entity)
         {
             var result = new CountryVM();
-            result.Id = entity.CountryId;
+            result.Id   = entity.CountryId;
             result.Code = entity.Code;
 
             var currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
@@ -40,12 +40,17 @@ namespace EntityFrameworkDemo.BLL
             var countryLanguage = entity.CountryLanguages
                                         .FirstOrDefault(l => l.Language == currentLanguage);
             if (countryLanguage == null)
-                countryLanguage = new CountryLanguage();
+            {
+                result.Language = Thread.CurrentThread.CurrentCulture.ToString();
+                result.LanguageId = Guid.NewGuid();
+            }
+            else
+            {
+                result.Language   = currentLanguage;
+                result.LanguageId = countryLanguage.CountryLanguageId;
+                result.Name       = countryLanguage.Name;
+            }
 
-            result.Language = currentLanguage;
-            result.LanguageId = countryLanguage.CountryLanguageId;
-            result.Name     = countryLanguage.Name;
-            
             return result;
         }
 
@@ -76,7 +81,7 @@ namespace EntityFrameworkDemo.BLL
                                           new CountryLanguage
                                           {
                                               CountryLanguageId = Guid.NewGuid(),
-                                              Language          = countryVm.Language,
+                                              Language          = Thread.CurrentThread.CurrentCulture.ToString(),
                                               Name              = countryVm.Name,
                                               //CountryId         = entity.CountryId   // 可以不用預先給定
                                           }
@@ -84,9 +89,24 @@ namespace EntityFrameworkDemo.BLL
             return entity;
         }
 
-        public bool Update(CountryVM country)
+        public bool Update(CountryVM countryVm)
         {
-            return _dal.Update(country);
+            var result = new Country
+                         {
+                             CountryId        = countryVm.Id,
+                             Code             = countryVm.Code,
+                             CountryLanguages = new List<CountryLanguage>()
+                         };
+
+            var item = new CountryLanguage();
+            item.CountryId = countryVm.Id;
+            item.Name = countryVm.Name;
+            item.Language = countryVm.Language ?? Thread.CurrentThread.CurrentCulture.ToString();
+            item.CountryLanguageId = countryVm.LanguageId.HasValue 
+                                         ? countryVm.LanguageId.Value 
+                                         : Guid.NewGuid();
+            result.CountryLanguages.Add(item);
+            return _dal.Update(result);
         }
 
         public bool Del(Guid id)

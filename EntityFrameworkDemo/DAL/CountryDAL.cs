@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading;
 using EntityFrameworkDemo.EF;
 using EntityFrameworkDemo.Log;
 using EntityFrameworkDemo.Models.EntityModel;
-using EntityFrameworkDemo.Models.ViewModel;
 
 namespace EntityFrameworkDemo.DAL
 {
@@ -64,9 +64,12 @@ namespace EntityFrameworkDemo.DAL
         /// <summary>
         ///     想法：從資料庫上抓出完整的資料，透過 attach 加上狀態，透過修改 attach entity 的值來進行更新資料 ~!!
         /// </summary>
-        public bool Update(CountryVM updateEntity)
+        public bool Update(Country updateEntity)
         {
-            var countryInDB = _dbContext.Country.First(c => c.CountryId == updateEntity.Id);
+            if (updateEntity == null)
+                throw new Exception("Country 無對應資料可更新");
+
+            var countryInDB = _dbContext.Country.First(c => c.CountryId == updateEntity.CountryId);
             if (countryInDB == null)
                 throw new Exception("Country 無對應資料可更新");
 
@@ -75,25 +78,7 @@ namespace EntityFrameworkDemo.DAL
 
             _dbContext.Entry(attachedCountry).Property(p => p.Code).IsModified = true;
 
-            var countryLanguageInDb = _dbContext.CountryLanguage
-                                                .FirstOrDefault(l => l.CountryLanguageId == updateEntity.LanguageId
-                                                                     && l.Language == updateEntity.Language);
-            CountryLanguage attachedCountryLanguage;
-            if (countryLanguageInDb == null)
-            {
-                attachedCountryLanguage = new CountryLanguage();
-                attachedCountryLanguage.CountryLanguageId = Guid.NewGuid();
-                attachedCountryLanguage.Language = Thread.CurrentThread.CurrentCulture.ToString();
-                attachedCountryLanguage.Name = updateEntity.Name;
-                attachedCountryLanguage.CountryId = countryInDB.CountryId;
-                _dbContext.CountryLanguage.Add(attachedCountryLanguage);
-            }
-            else
-            {
-                attachedCountryLanguage = _dbContext.CountryLanguage.Attach(countryLanguageInDb);
-                attachedCountryLanguage.Name = updateEntity.Name;
-                _dbContext.Entry(attachedCountryLanguage).Property(p => p.Name).IsModified = true;
-            }
+            _dbContext.CountryLanguage.AddOrUpdate(updateEntity.CountryLanguages.First());
 
             // 同時更新二個 Table，會自動加上 transaction
             return _dbContext.SaveChanges() > 0;
