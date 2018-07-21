@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using System.Web.Mvc;
-using EntityFrameworkDemo.BLL;
 using EntityFrameworkDemo.BLL.IBLL;
-using EntityFrameworkDemo.Enums;
 using EntityFrameworkDemo.Log;
-using EntityFrameworkDemo.Models.Shared;
 using EntityFrameworkDemo.Models.ViewModel;
 
 namespace EntityFrameworkDemo.Controllers

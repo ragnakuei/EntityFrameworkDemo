@@ -15,14 +15,12 @@ namespace EntityFrameworkDemo.DAL
     {
         private readonly DemoDbContext _dbContext;
         private readonly LogAdapter    _logger;
-        private readonly string        _currentLanguage;
 
         public CountyDAL(DemoDbContext dbContext, LogAdapter logger)
         {
             _dbContext = dbContext;
             _logger    = logger;
             _logger.Initial<CountyDAL>();
-            _currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
         }
 
         public IEnumerable<County> Get()
@@ -44,9 +42,10 @@ namespace EntityFrameworkDemo.DAL
             if(county == null)
                 throw new Exception("查無資料");
 
+            var currentLanguage = Thread.CurrentThread.CurrentUICulture.ToString();
             var countyLanguage = _dbContext.CountyLanguage
                                             .Where(l => l.CountyId == id
-                                                        && l.Language == _currentLanguage)
+                                                        && l.Language == currentLanguage)
                                             .AsNoTracking();
             county.CountyLanguages = countyLanguage.ToList();
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Globalization;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -11,7 +12,7 @@ using NLog;
 
 namespace EntityFrameworkDemo
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         private static readonly Logger _log = LogManager.GetCurrentClassLogger();
 
@@ -22,28 +23,30 @@ namespace EntityFrameworkDemo
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
 
-    protected void Application_BeginRequest(object sender, EventArgs e)
-    {
-        var ci = new CultureInfo(CultureHelper.GetDefaultCulture());
-        try
+        protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            var userLanguages = Request.Cookies["_culture"]
-                                       ?.Value;
+            var ci = new CultureInfo(CultureHelper.GetDefaultCulture());
+            try
+            {
+                var userLanguages = Request.Cookies["_culture"]
+                                           ?.Value;
 
-            ci = string.IsNullOrWhiteSpace(userLanguages)
-                     ? ci
-                     : new CultureInfo(userLanguages);
+                ci = string.IsNullOrWhiteSpace(userLanguages)
+                         ? ci
+                         : new CultureInfo(userLanguages);
+            }
+            catch (Exception ex)
+            {
+                _log.Error(ex.StackTrace);
+                _log.Error(ex.Message);
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentUICulture = ci;
+                Thread.CurrentThread.CurrentCulture   = ci;
+            }
+
+            HttpContext.Current.Items["CurrentLanguage"] = ci.ToString();
         }
-        catch (Exception ex)
-        {
-            _log.Error(ex.StackTrace);
-            _log.Error(ex.Message);
-        }
-        finally
-        {
-            System.Threading.Thread.CurrentThread.CurrentUICulture = ci;
-            System.Threading.Thread.CurrentThread.CurrentCulture   = ci;
-        }
-    }
     }
 }

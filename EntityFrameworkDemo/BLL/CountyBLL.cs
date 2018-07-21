@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Web;
 using EntityFrameworkDemo.BLL.IBLL;
 using EntityFrameworkDemo.DAL.IDAL;
 using EntityFrameworkDemo.Log;
@@ -39,9 +40,10 @@ namespace EntityFrameworkDemo.BLL
             var result = new CountyVM();
             result.Id = entity.CountyId;
 
+            var currentLanguage = HttpContext.Current.Items["CurrentLanguage"]?.ToString();
             var countyLanguage = entity.CountyLanguages
-                                       ?.FirstOrDefault(cl=>cl.Language == Thread.CurrentThread.CurrentUICulture.ToString());
-            result.Language = Thread.CurrentThread.CurrentUICulture.ToString();
+                                       ?.FirstOrDefault(cl=>cl.Language == currentLanguage);
+            result.Language = currentLanguage;
             if (countyLanguage != null)
             { 
                 result.LanguageId = countyLanguage.CountyLanguageId;
@@ -52,7 +54,7 @@ namespace EntityFrameworkDemo.BLL
             {
                 result.CountryId = entity.CountryId;
                 result.CountryName = entity.Country.CountryLanguages
-                                           ?.FirstOrDefault(cl => cl.Language == Thread.CurrentThread.CurrentUICulture.ToString())
+                                           ?.FirstOrDefault(cl => cl.Language == currentLanguage)
                                            ?.Name;
             }
             
