@@ -48,17 +48,8 @@ namespace EntityFrameworkDemo.DAL
 
         public bool Add(Country country)
         {
-            try
-            {
-                _dbContext.Country.Add(country);
-                return _dbContext.SaveChanges() > 0;
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e.StackTrace);
-                _logger.Error(e.Message);
-                return false;
-            }
+            _dbContext.Country.Add(country);
+            return _dbContext.SaveChanges() > 0;
         }
 
         /// <summary>
@@ -73,11 +64,7 @@ namespace EntityFrameworkDemo.DAL
             if (countryInDB == null)
                 throw new Exception("Country 無對應資料可更新");
 
-            var attachedCountry = _dbContext.Country.Attach(countryInDB);
-            attachedCountry.Code = updateEntity.Code;
-
-            _dbContext.Entry(attachedCountry).Property(p => p.Code).IsModified = true;
-
+            _dbContext.Country.AddOrUpdate(updateEntity);
             _dbContext.CountryLanguage.AddOrUpdate(updateEntity.CountryLanguages.First());
 
             // 同時更新二個 Table，會自動加上 transaction
