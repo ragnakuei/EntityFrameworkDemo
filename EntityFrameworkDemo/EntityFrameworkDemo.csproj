@@ -134,15 +134,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="BLL\CountryBLL.cs" />
     <Compile Include="BLL\CountyBLL.cs" />
-    <Compile Include="BLL\IBLL\ICountryBLL.cs" />
-    <Compile Include="BLL\IBLL\ICountyBLL.cs" />
+    <Compile Include="IBLL\ICountryBLL.cs" />
+    <Compile Include="IBLL\ICountyBLL.cs" />
     <Compile Include="DAL\CountyDAL.cs" />
-    <Compile Include="DAL\IDAL\ICountyDAL.cs" />
+    <Compile Include="IDAL\ICountyDAL.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\CountryDAL.cs" />
-    <Compile Include="DAL\IDAL\ICountryDAL.cs" />
+    <Compile Include="IDAL\ICountryDAL.cs" />
     <Compile Include="DI\DependencyInjectionResolver.cs" />
     <Compile Include="EF\DemoDbContext.cs" />
     <Compile Include="Enums\CultureEnum.cs" />
@@ -163,6 +163,7 @@
     <Compile Include="Models\EntityModel\County.cs" />
     <Compile Include="Models\EntityModel\CountyLanguage.cs" />
     <Compile Include="Models\Shared\UserInfo.cs" />
+    <Compile Include="Models\ViewModel\CompCVVM.cs" />
     <Compile Include="Models\ViewModel\CountryVM.cs" />
     <Compile Include="Models\ViewModel\CountyVM.cs" />
     <Compile Include="Models\ViewModel\CultureVM.cs" />

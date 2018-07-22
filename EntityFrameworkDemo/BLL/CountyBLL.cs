@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EntityFrameworkDemo.BLL.IBLL;
-using EntityFrameworkDemo.DAL.IDAL;
+using EntityFrameworkDemo.IBLL;
+using EntityFrameworkDemo.IDAL;
 using EntityFrameworkDemo.Log;
 using EntityFrameworkDemo.Models.EntityModel;
 using EntityFrameworkDemo.Models.Shared;

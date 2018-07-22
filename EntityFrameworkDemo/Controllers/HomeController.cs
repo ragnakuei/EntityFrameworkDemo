@@ -17,9 +17,7 @@ namespace EntityFrameworkDemo.Controllers
 
         public ActionResult Index()
         {
-            var cultureCookie = Request.Cookies["_culture"]?.Value ?? "(None)";
-
-            ViewBag.CookieCulture = cultureCookie;
+            ViewBag.CurrentLanguage = _userInfo.CurrentLanguage;
 
             ViewData["LangSelectList"] = CultureHelper.GetAllImplementedCultures()
                                                       .Select(c =>
@@ -27,7 +25,7 @@ namespace EntityFrameworkDemo.Controllers
                                                                   var item = new SelectListItem();
                                                                   item.Text = c.Value;
                                                                   item.Value = c.Value;
-                                                                  item.Selected = c.Value.ToLower() == cultureCookie.ToLower();
+                                                                  item.Selected = c.Value.ToLower() == _userInfo.CurrentLanguage.ToLower();
                                                                   return item;
                                                               });
 

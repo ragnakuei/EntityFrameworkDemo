@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using EntityFrameworkDemo.Models.EntityModel;
-using EntityFrameworkDemo.Models.Shared;
 
-namespace EntityFrameworkDemo.DAL.IDAL
+namespace EntityFrameworkDemo.IDAL
 {
     public interface ICountyDAL
     {

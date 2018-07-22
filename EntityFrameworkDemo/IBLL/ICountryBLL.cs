@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using EntityFrameworkDemo.Models.Shared;
 using EntityFrameworkDemo.Models.ViewModel;
 
-namespace EntityFrameworkDemo.BLL.IBLL
+namespace EntityFrameworkDemo.IBLL
 {
     public interface ICountryBLL
     {

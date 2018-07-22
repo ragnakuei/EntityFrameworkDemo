@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using EntityFrameworkDemo.BLL.IBLL;
+using EntityFrameworkDemo.IBLL;
 using EntityFrameworkDemo.Log;
 using EntityFrameworkDemo.Models.Shared;
 using EntityFrameworkDemo.Models.ViewModel;
@@ -16,7 +16,9 @@ namespace EntityFrameworkDemo.Controllers
         private readonly LogAdapter _logAdapter;
         private readonly UserInfo   _userInfo;
 
-        public CountyController(ICountyBLL bll, LogAdapter logAdapter, UserInfo userInfo)
+        public CountyController(ICountyBLL bll, 
+                                LogAdapter logAdapter, 
+                                UserInfo userInfo)
         {
             _userInfo   = userInfo;
             _bll        = bll;

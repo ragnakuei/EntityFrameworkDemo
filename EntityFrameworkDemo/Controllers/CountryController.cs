@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Web.Mvc;
-using EntityFrameworkDemo.BLL.IBLL;
+using EntityFrameworkDemo.IBLL;
 using EntityFrameworkDemo.Log;
 using EntityFrameworkDemo.Models.Shared;
 using EntityFrameworkDemo.Models.ViewModel;
