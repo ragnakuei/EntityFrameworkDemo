@@ -134,9 +134,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="BLL\CountryBLL.cs" />
     <Compile Include="BLL\CountyBLL.cs" />
+    <Compile Include="BLL\CvBLL.cs" />
+    <Compile Include="Controllers\CvController.cs" />
+    <Compile Include="DAL\CvDAL.cs" />
+    <Compile Include="Helpers\CommonHelpers.cs" />
     <Compile Include="IBLL\ICountryBLL.cs" />
     <Compile Include="IBLL\ICountyBLL.cs" />
     <Compile Include="DAL\CountyDAL.cs" />
+    <Compile Include="IBLL\ICvBLL.cs" />
     <Compile Include="IDAL\ICountyDAL.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\CountyController.cs" />
@@ -151,6 +156,7 @@
     </Compile>
     <Compile Include="Helpers\CultureEnumHelpers.cs" />
     <Compile Include="Helpers\CultureHelper.cs" />
+    <Compile Include="IDAL\ICvDAL.cs" />
     <Compile Include="Log\LogAdapter.cs" />
     <Compile Include="Models\EntityModel\ActionReceipt.cs" />
     <Compile Include="Models\EntityModel\ActionReceiptNoteLanguage.cs" />
@@ -163,7 +169,7 @@
     <Compile Include="Models\EntityModel\County.cs" />
     <Compile Include="Models\EntityModel\CountyLanguage.cs" />
     <Compile Include="Models\Shared\UserInfo.cs" />
-    <Compile Include="Models\ViewModel\CompCVVM.cs" />
+    <Compile Include="Models\ViewModel\CompCvVM.cs" />
     <Compile Include="Models\ViewModel\CountryVM.cs" />
     <Compile Include="Models\ViewModel\CountyVM.cs" />
     <Compile Include="Models\ViewModel\CultureVM.cs" />
@@ -189,6 +195,9 @@
     <Content Include="Views\County\Details.cshtml" />
     <Content Include="Views\County\Edit.cshtml" />
     <Content Include="Views\County\Delete.cshtml" />
+    <Content Include="Views\Cv\Index.cshtml" />
+    <Content Include="Views\Cv\Create.cshtml" />
+    <Content Include="Views\Cv\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

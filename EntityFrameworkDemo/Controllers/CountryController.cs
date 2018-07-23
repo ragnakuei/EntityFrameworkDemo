@@ -19,7 +19,7 @@ namespace EntityFrameworkDemo.Controllers
             _userInfo   = userInfo;
             _bll        = bll;
             _logAdapter = logAdapter;
-            _logAdapter.Initial(nameof(CountryController));
+            _logAdapter.Initial(this.GetType().Name);
         }
 
         public ActionResult Index()

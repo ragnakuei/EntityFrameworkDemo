@@ -12,6 +12,6 @@ namespace EntityFrameworkDemo.IBLL
         bool                         Add(CountyVM    countyVm);
         bool                         Update(CountyVM countyVm);
         bool                         Del(Guid        id);
-        IEnumerable<CountryLanguage> GetIdAndCurrentLanguageNames();
+        IEnumerable<CountryLanguage> GetIdAndCurrentLanguageNames(string currentLanguage);
     }
 }

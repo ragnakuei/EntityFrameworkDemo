@@ -91,4 +91,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CountryId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="e3828daa-db0c-41e6-a894-f969d7bc0f0d" ChangeDateTime="07/23/2018 13:44:07">
+    <Property Name="ElementName" Value="[dbo].[CompCvLanguageRequirement].[LanguageRequirement]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[CompCvLanguageRequirement]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LanguageRequirementId" />
+  </Operation>
 </Operations>

@@ -93,10 +93,10 @@ namespace EntityFrameworkDemo.DAL
             return _dbContext.SaveChanges() > 0;
         }
 
-        public IEnumerable<CountryLanguage> GetIdAndCurrentLanguageNames()
+        public IEnumerable<CountryLanguage> GetIdAndCurrentLanguageNames(string currentLanguage)
         {
             var result = _dbContext.CountryLanguage
-                                   .Where(cl => cl.Language == _userInfo.CurrentLanguage)
+                                   .Where(cl => cl.Language == currentLanguage)
                                    .Include(cl => cl.Country)
                                    .Select(cl=>new
                                                {

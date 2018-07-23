@@ -26,7 +26,7 @@ namespace EntityFrameworkDemo.BLL
             _countryDal = countryDal;
             _logger     = logger;
             _userInfo   = userInfo;
-            _logger.Initial(nameof(CountyBLL));
+            _logger.Initial(this.GetType().Name);
         }
 
         public List<CountyVM> Get()
@@ -122,9 +122,9 @@ namespace EntityFrameworkDemo.BLL
             return _countyDal.Delete(id);
         }
 
-        public IEnumerable<CountryLanguage> GetIdAndCurrentLanguageNames()
+        public IEnumerable<CountryLanguage> GetIdAndCurrentLanguageNames(string currentLanguage)
         {
-            var entities = _countryDal.GetIdAndCurrentLanguageNames();
+            var entities = _countryDal.GetIdAndCurrentLanguageNames(currentLanguage);
             return entities;
         }
     }

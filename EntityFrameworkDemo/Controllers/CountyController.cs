@@ -23,7 +23,7 @@ namespace EntityFrameworkDemo.Controllers
             _userInfo   = userInfo;
             _bll        = bll;
             _logAdapter = logAdapter;
-            _logAdapter.Initial(nameof(CountyController));
+            _logAdapter.Initial(this.GetType().Name);
         }
 
         public ActionResult Index()
@@ -123,7 +123,7 @@ namespace EntityFrameworkDemo.Controllers
 
         private IEnumerable<SelectListItem> GetCountryList()
         {
-            var result = _bll.GetIdAndCurrentLanguageNames()
+            var result = _bll.GetIdAndCurrentLanguageNames(_userInfo.CurrentLanguage)
                              .Select(cl=>new SelectListItem
                                          {
                                              Value = cl.CountryId.ToString(),

@@ -11,6 +11,6 @@ namespace EntityFrameworkDemo.IDAL
         Country                      Get(Guid       id);
         bool                         Update(Country entity);
         bool                         Delete(Guid    id);
-        IEnumerable<CountryLanguage> GetIdAndCurrentLanguageNames();
+        IEnumerable<CountryLanguage> GetIdAndCurrentLanguageNames(string currentLanguage);
     }
 }

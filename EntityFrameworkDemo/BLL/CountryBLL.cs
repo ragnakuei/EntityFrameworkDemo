@@ -23,7 +23,7 @@ namespace EntityFrameworkDemo.BLL
             _countryDal = countryDal;
             _logger     = logger;
             _userInfo   = userInfo;
-            _logger.Initial(nameof(CountryBLL));
+            _logger.Initial(this.GetType().Name);
         }
 
         public List<CountryVM> Get()

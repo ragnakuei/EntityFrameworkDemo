@@ -25,10 +25,13 @@ namespace EntityFrameworkDemo.DI
             service.AddTransient<HomeController>();
             service.AddTransient<CountryController>();
             service.AddTransient<CountyController>();
+            service.AddTransient<CvController>();
             service.AddTransient<ICountryBLL, CountryBLL>();
             service.AddTransient<ICountyBLL, CountyBLL>();
+            service.AddTransient<ICvBLL, CvBLL>();
             service.AddTransient<ICountryDAL, CountryDAL>();
             service.AddTransient<ICountyDAL, CountyDAL>();
+            service.AddTransient<ICvDAL, CvDAL>();
             service.AddTransient<UserInfo, UserInfo>(s => new UserInfo(HttpContext.Current));
 
             service.AddScoped<LogAdapter, LogAdapter>();
