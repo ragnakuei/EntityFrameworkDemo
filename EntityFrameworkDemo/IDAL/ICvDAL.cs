@@ -11,6 +11,6 @@ namespace EntityFrameworkDemo.IDAL
         IEnumerable<CountryLanguage> GetCountryIdNames(string currentLanguage);
         IEnumerable<CountyLanguage> GetCountyIdNames(string currentLanguage);
         void Add(CompCv entity);
-        
+        bool Update(CompCv entity);
     }
 }

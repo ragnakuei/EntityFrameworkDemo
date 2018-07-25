@@ -105,9 +105,10 @@ namespace EntityFrameworkDemo.BLL
             _cvDal.Add(entity);
         }
 
-        public bool Update(CountyVM county)
+        public bool Update(CompCvVM cvVm)
         {
-            throw new NotImplementedException();
+            var entity = ToCompCv(cvVm,isUpdate: true);
+            return _cvDal.Update(entity);
         }
 
         public bool Del(Guid id)
@@ -115,10 +116,12 @@ namespace EntityFrameworkDemo.BLL
             throw new NotImplementedException();
         }
 
-        private CompCv ToCompCv(CompCvVM vm)
+        private CompCv ToCompCv(CompCvVM vm, bool isUpdate = false)
         {
             var cv = new CompCv();
-            cv.CvId = Guid.NewGuid();
+            cv.CvId = isUpdate
+                          ? vm.CvId
+                          : Guid.NewGuid();
             cv.FirstName = vm.FirstName;
             cv.LastName = vm.LastName;
             cv.CountryId = vm.CountryId;
@@ -126,18 +129,21 @@ namespace EntityFrameworkDemo.BLL
             cv.CompCvCertificates = vm.Certificates.Select(c =>
                                                            {
                                                                var entity = ToCompCvCerttificate(c);
+                                                               entity.CertificateId = c.CertificateId ?? Guid.NewGuid();
                                                                entity.CvId = cv.CvId;
                                                                return entity;
                                                            }).ToList();
             cv.CompCvEducations = vm.Educations.Select(c =>
                                                        {
                                                            var entity = ToCompCvEducations(c);
+                                                           entity.EducationId = c.EducationId ?? Guid.NewGuid();
                                                            entity.CvId = cv.CvId;
                                                            return entity;
                                                        }).ToList();
             cv.CompCvLanguageRequirements = vm.LanguageRequirements.Select(c =>
                                                                            {
                                                                                var entity = ToCompCvLanguageRequirement(c);
+                                                                               entity.LanguageRequirementId = c.LanguageRequirementId ?? Guid.NewGuid();
                                                                                entity.CvId = cv.CvId;
                                                                                return entity;
                                                                            }).ToList();
@@ -147,7 +153,6 @@ namespace EntityFrameworkDemo.BLL
         private CompCvCertificate ToCompCvCerttificate(CompCvCertificateVM vm)
         {
             var certificate = new CompCvCertificate();
-            certificate.CertificateId = Guid.NewGuid();
             certificate.CertificateName = vm.CertificateName;
             return certificate;
         }
@@ -155,7 +160,6 @@ namespace EntityFrameworkDemo.BLL
         private CompCvEducation ToCompCvEducations(CompCvEducationVM vm)
         {
             var education = new CompCvEducation();
-            education.EducationId = Guid.NewGuid();
             education.AcademyName = vm.AcademyName;
             return education;
         }
@@ -163,7 +167,6 @@ namespace EntityFrameworkDemo.BLL
         private CompCvLanguageRequirement ToCompCvLanguageRequirement(CompCvLanguageRequirementVM vm)
         {
             var requirement = new CompCvLanguageRequirement();
-            requirement.LanguageRequirementId = Guid.NewGuid();
             requirement.Language = vm.Language;
             requirement.Listening = vm.Listening;
             return requirement;

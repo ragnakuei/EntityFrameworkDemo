@@ -18,20 +18,20 @@ namespace EntityFrameworkDemo.Models.ViewModel
 
     public class CompCvCertificateVM
     {
-        public Guid      CertificateId          { get; set; }
-        public string    CertificateName        { get; set; }
+        public Guid?  CertificateId   { get; set; }
+        public string CertificateName { get; set; }
     }
 
     public class CompCvLanguageRequirementVM
     {
-        public Guid LanguageRequirementId { get; set; }
-        public byte Language            { get; set; }
-        public byte Listening           { get; set; }
+        public Guid? LanguageRequirementId { get; set; }
+        public byte  Language              { get; set; }
+        public byte  Listening             { get; set; }
     }
 
     public class CompCvEducationVM
     {
-        public Guid      EducationId          { get; set; }
-        public string    AcademyName          { get; set; }
+        public Guid?  EducationId { get; set; }
+        public string AcademyName { get; set; }
     }
 }

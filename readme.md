@@ -16,7 +16,7 @@
     * 有 - CountryDAL.Get()
 * insert / update 時，欄位為 mapping table id 是否會新增一筆新的資料至 mapping table 中 ?
     * insert 會 - CountryDAL.Add()
-    * insert 不會 - TODO
+    * insert 不會 - CvDAL.Add()
     * update 不會 - CountryDAL.Update()
 ## Demo
 

@@ -12,7 +12,7 @@ namespace EntityFrameworkDemo.IBLL
         IEnumerable<CountyLanguage> GetCountyIdNames(string currentLanguage);
         void Add(CompCvVM cvVm);
         CompCvVM Get(Guid id);
-        bool Update(CountyVM county);
+        bool Update(CompCvVM cvVm);
         bool Del(Guid id);
     }
 }

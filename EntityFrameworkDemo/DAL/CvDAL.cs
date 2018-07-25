@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using EntityFrameworkDemo.EF;
@@ -18,8 +18,8 @@ namespace EntityFrameworkDemo.DAL
         private          UserInfo      _userInfo;
 
         public CvDAL(DemoDbContext dbContext,
-                         LogAdapter    logger,
-                         UserInfo      userInfo)
+                     LogAdapter    logger,
+                     UserInfo      userInfo)
         {
             _dbContext = dbContext;
             _logger    = logger;
@@ -72,6 +72,29 @@ namespace EntityFrameworkDemo.DAL
         {
             _dbContext.CompCv.Add(entity);
             _dbContext.SaveChanges();
+        }
+
+        public bool Update(CompCv entity)
+        {
+            if (entity == null)
+                throw new Exception("CompCv 無對應資料可更新");
+
+            var compCvInDb = _dbContext.Country.First(c => c.CountryId == entity.CountryId);
+            if (compCvInDb == null)
+                throw new Exception("CompCv 無對應資料可更新");
+
+            _dbContext.CompCv.AddOrUpdate(entity);
+
+            foreach (var certificateEntity in entity.CompCvCertificates)
+                _dbContext.CompCvCertificate.Attach(certificateEntity);
+
+            foreach (var educationEntity in entity.CompCvEducations)
+                _dbContext.CompCvEducation.Attach(educationEntity);
+
+            foreach (var langReqEntity in entity.CompCvLanguageRequirements)
+                _dbContext.CompCvLanguageRequirement.Attach(langReqEntity);
+
+            return _dbContext.SaveChanges() > 0;
         }
 
         public void Dispose()

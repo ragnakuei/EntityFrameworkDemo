@@ -88,26 +88,30 @@ namespace EntityFrameworkDemo.Controllers
             if (id == Guid.Empty)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var county = _cvBLL.Get(id);
-            if (county == null)
+            var compCv = _cvBLL.Get(id);
+            if (compCv == null)
                 return HttpNotFound();
+
+            compCv.Certificates.Add(new CompCvCertificateVM());
+            compCv.Educations.Add(new CompCvEducationVM());
+            compCv.LanguageRequirements.Add(new CompCvLanguageRequirementVM());
 
             ViewBag.Language  = GetLanguageOptions();
             ViewBag.Listening = GetLanguageRequirementOptions();
             ViewBag.CountryId = GetCountryOptions();
             ViewBag.CountyId  = GetCountyOptions();
-            return View(county);
+            return View(compCv);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CountyVM county)
+        public ActionResult Edit(CompCvVM compCv)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _cvBLL.Update(county);
+                    _cvBLL.Update(compCv);
                 }
                 catch (Exception e)
                 {
@@ -116,7 +120,7 @@ namespace EntityFrameworkDemo.Controllers
                     ViewBag.Listening = GetLanguageRequirementOptions();
                     ViewBag.CountryId = GetCountryOptions();
                     ViewBag.CountyId  = GetCountyOptions();
-                    return View(county);
+                    return View(compCv);
                 }
                 return RedirectToAction("Index");
             }
@@ -125,7 +129,7 @@ namespace EntityFrameworkDemo.Controllers
             ViewBag.Listening = GetLanguageRequirementOptions();
             ViewBag.CountryId = GetCountryOptions();
             ViewBag.CountyId  = GetCountyOptions();
-            return View(county);
+            return View(compCv);
         }
 
         public ActionResult Delete(Guid id)
