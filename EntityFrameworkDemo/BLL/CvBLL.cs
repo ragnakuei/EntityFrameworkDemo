@@ -113,7 +113,7 @@ namespace EntityFrameworkDemo.BLL
 
         public bool Del(Guid id)
         {
-            throw new NotImplementedException();
+            return _cvDal.Delete(id);
         }
 
         private CompCv ToCompCv(CompCvVM vm, bool isUpdate = false)
@@ -126,27 +126,32 @@ namespace EntityFrameworkDemo.BLL
             cv.LastName = vm.LastName;
             cv.CountryId = vm.CountryId;
             cv.CountyId = vm.CountyId;
-            cv.CompCvCertificates = vm.Certificates.Select(c =>
+            cv.CompCvCertificates = vm.Certificates
+                                      .Where(c=>string.IsNullOrWhiteSpace(c.CertificateName) == false)
+                                      .Select(c =>
+                                                   {
+                                                       var entity = ToCompCvCerttificate(c);
+                                                       entity.CertificateId = c.CertificateId ?? Guid.NewGuid();
+                                                       entity.CvId = cv.CvId;
+                                                       return entity;
+                                                   }).ToList();
+            cv.CompCvEducations = vm.Educations
+                                    .Where(c => string.IsNullOrWhiteSpace(c.AcademyName) == false)
+                                    .Select(c =>
+                                               {
+                                                   var entity = ToCompCvEducations(c);
+                                                   entity.EducationId = c.EducationId ?? Guid.NewGuid();
+                                                   entity.CvId = cv.CvId;
+                                                   return entity;
+                                               }).ToList();
+            cv.CompCvLanguageRequirements = vm.LanguageRequirements
+                                              .Select(c =>
                                                            {
-                                                               var entity = ToCompCvCerttificate(c);
-                                                               entity.CertificateId = c.CertificateId ?? Guid.NewGuid();
+                                                               var entity = ToCompCvLanguageRequirement(c);
+                                                               entity.LanguageRequirementId = c.LanguageRequirementId ?? Guid.NewGuid();
                                                                entity.CvId = cv.CvId;
                                                                return entity;
                                                            }).ToList();
-            cv.CompCvEducations = vm.Educations.Select(c =>
-                                                       {
-                                                           var entity = ToCompCvEducations(c);
-                                                           entity.EducationId = c.EducationId ?? Guid.NewGuid();
-                                                           entity.CvId = cv.CvId;
-                                                           return entity;
-                                                       }).ToList();
-            cv.CompCvLanguageRequirements = vm.LanguageRequirements.Select(c =>
-                                                                           {
-                                                                               var entity = ToCompCvLanguageRequirement(c);
-                                                                               entity.LanguageRequirementId = c.LanguageRequirementId ?? Guid.NewGuid();
-                                                                               entity.CvId = cv.CvId;
-                                                                               return entity;
-                                                                           }).ToList();
             return cv;
         }
 

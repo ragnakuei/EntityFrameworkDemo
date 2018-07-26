@@ -94,7 +94,6 @@ namespace EntityFrameworkDemo.Controllers
 
             compCv.Certificates.Add(new CompCvCertificateVM());
             compCv.Educations.Add(new CompCvEducationVM());
-            compCv.LanguageRequirements.Add(new CompCvLanguageRequirementVM());
 
             ViewBag.Language  = GetLanguageOptions();
             ViewBag.Listening = GetLanguageRequirementOptions();

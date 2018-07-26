@@ -14,16 +14,16 @@ namespace EntityFrameworkDemo.DAL
     public class CvDAL : ICvDAL, IDisposable
     {
         private readonly DemoDbContext _dbContext;
-        private readonly LogAdapter    _logger;
-        private          UserInfo      _userInfo;
+        private readonly LogAdapter _logger;
+        private UserInfo _userInfo;
 
         public CvDAL(DemoDbContext dbContext,
-                     LogAdapter    logger,
-                     UserInfo      userInfo)
+                     LogAdapter logger,
+                     UserInfo userInfo)
         {
             _dbContext = dbContext;
-            _logger    = logger;
-            _userInfo  = userInfo;
+            _logger = logger;
+            _userInfo = userInfo;
             _logger.Initial<CountyDAL>();
         }
 
@@ -86,14 +86,29 @@ namespace EntityFrameworkDemo.DAL
             _dbContext.CompCv.AddOrUpdate(entity);
 
             foreach (var certificateEntity in entity.CompCvCertificates)
-                _dbContext.CompCvCertificate.Attach(certificateEntity);
+                _dbContext.CompCvCertificate.AddOrUpdate(certificateEntity);
 
             foreach (var educationEntity in entity.CompCvEducations)
-                _dbContext.CompCvEducation.Attach(educationEntity);
+                _dbContext.CompCvEducation.AddOrUpdate(educationEntity);
 
             foreach (var langReqEntity in entity.CompCvLanguageRequirements)
-                _dbContext.CompCvLanguageRequirement.Attach(langReqEntity);
+                _dbContext.CompCvLanguageRequirement.AddOrUpdate(langReqEntity);
 
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        public bool Delete(Guid id)
+        {
+            var compcCvEntity = _dbContext.CompCv
+                                          .Include(cv => cv.CompCvCertificates)
+                                          .Include(cv => cv.CompCvEducations)
+                                          .Include(cv => cv.CompCvLanguageRequirements)
+                                          .FirstOrDefault(cv => cv.CvId == id);
+
+            _dbContext.CompCvCertificate.RemoveRange(compcCvEntity.CompCvCertificates);
+            _dbContext.CompCvEducation.RemoveRange(compcCvEntity.CompCvEducations);
+            _dbContext.CompCvLanguageRequirement.RemoveRange(compcCvEntity.CompCvLanguageRequirements);
+            _dbContext.CompCv.Remove(compcCvEntity);
             return _dbContext.SaveChanges() > 0;
         }
 
