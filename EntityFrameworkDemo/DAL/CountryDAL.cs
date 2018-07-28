@@ -29,6 +29,8 @@ namespace EntityFrameworkDemo.DAL
 
         public IEnumerable<Country> Get()
         {
+            _logger.Debug("In County Get()");
+
             // 使用 Left Join
             return _dbContext.Country
                              .Include(c => c.CountryLanguages);
@@ -36,6 +38,8 @@ namespace EntityFrameworkDemo.DAL
 
         public Country Get(Guid id)
         {
+            _logger.Debug("In County Get(id)");
+
             // 分開查詢
             var country = _dbContext.Country
                                     .AsNoTracking()
@@ -59,19 +63,15 @@ namespace EntityFrameworkDemo.DAL
 
         public bool Update(Country updateEntity)
         {
-            if (updateEntity == null)
+            _logger.Debug("In County Update()");
+
+             if (updateEntity == null)
                 throw new Exception("Country 無對應資料可更新");
 
-            var countryInDB = _dbContext.Country
-                                        .First(c => c.CountryId == updateEntity.CountryId);
-            if (countryInDB == null)
-                throw new Exception("Country 無對應資料可更新");
+            _dbContext.Country.AddOrUpdate(updateEntity);
 
-            _dbContext.Country
-                      .AddOrUpdate(updateEntity);
-
-            _dbContext.CountryLanguage
-                      .AddOrUpdate(updateEntity.CountryLanguages.First());
+            foreach (var countryLanguage in updateEntity.CountryLanguages)
+                _dbContext.CountryLanguage.AddOrUpdate(countryLanguage);
 
             // 同時更新二個 Table，會自動加上 transaction
             return _dbContext.SaveChanges() > 0;

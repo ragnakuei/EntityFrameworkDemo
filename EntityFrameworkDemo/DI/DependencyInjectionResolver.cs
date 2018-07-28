@@ -35,7 +35,9 @@ namespace EntityFrameworkDemo.DI
             service.AddTransient<UserInfo, UserInfo>(s => new UserInfo(HttpContext.Current));
 
             service.AddScoped<LogAdapter, LogAdapter>();
+
             service.AddScoped<DemoDbContext>(s => DemoDbContext.Create());
+            //service.AddTransient<DemoDbContext>(s => DemoDbContext.Create());
 
             _provider = service.BuildServiceProvider();
         }
