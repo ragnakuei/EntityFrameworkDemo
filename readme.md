@@ -18,6 +18,7 @@
     * insert 會 - CountryDAL.Add()
     * insert 不會 - CvDAL.Add()
     * update 不會 - CountryDAL.Update()
+* TODO:雙主鍵 self reference one key
 
 ### 注意事項
 * DI Scoped DbContext 時，當多次透過 Attach() 來更新資料時，會很容易出現 Exception。
